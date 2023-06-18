@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<!-- glicol logo -->
+<html>
+  <head>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/fontfaceobserver/2.1.0/fontfaceobserver.standalone.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Overpass:wght@500;600;700&family=Press+Start+2P&family=VT323&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <canvas id="myCanvas" width="2000" height="2000"> </canvas>
+    <button id="download">download</button>
+    <script>
+      var c = document.getElementById("myCanvas");
+      var ctx = c.getContext("2d");
+
+      // var primary = "#77f0a9";
+      // var secondary = "#f3e2b9";
+
+      // var primary = "#bfdbfe";
+      // var secondary = "#fbcfe8";
+
+      // var primary = "#fbcfe8";
+      // var secondary = "#bfdbfe";
+
+      // chosen one
+      var primary = "#B2DFDB";
+      var secondary = "#C8E6C9";
+      // reverse
+      // var primary = "#4D2024";
+      // var secondary = "#371936";
+
+      // var primary = "#48827f";
+      // var secondary = "#C8E6C9";
+
+      // var primary = "#3CB371";
+      // var secondary = "#C8E6C9";
+
+      var amplitude = 80;
+      var frequency = (2 * Math.PI) / c.width;
+      var phaseShift = 0; // adjust this value to move the second sine wave
+
+      for (var x = 0; x < c.width; x++) {
+        var y1 = amplitude * Math.sin(frequency * x) + c.height / 3;
+        var y2 =
+          amplitude * Math.sin(frequency * (x + phaseShift)) +
+          (2 * c.height) / 3;
+
+        for (var i = 0; i < c.height; i++) {
+          var color;
+          // if (i < y1 || i > y2) {
+          if (i > y2) {
+            color = primary;
+          } else {
+            color = secondary;
+          }
+          ctx.fillStyle = color;
+          ctx.fillRect(x, i, 1, 1);
+        }
+      }
+
+      // var family = "Press Start 2P";
+      var family = "VT323";
+      // var family = "Overpass";
+
+      // window.font = new FontFaceObserver("Overpass");
+      window.font = new FontFaceObserver(family);
+
+      window.font.load().then(function () {
+        ctx.font = `500px ${family}`;
+        ctx.fillStyle = "white";
+        // ctx.fillStyle = primary;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText("glicol", c.width * 0.5, c.height * 0.5);
+      });
+
+      document
+        .getElementById("download")
+        .addEventListener("click", function () {
+          var downloadLink = document.createElement("a");
+          downloadLink.setAttribute("download", "logo.png");
+          var canvas = document.getElementById("myCanvas");
+          canvas.toBlob(function (blob) {
+            var url = URL.createObjectURL(blob);
+            downloadLink.setAttribute("href", url);
+            downloadLink.click();
+          });
+        });
+    </script>
+  </body>
+</html>
